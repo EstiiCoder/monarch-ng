@@ -43,6 +43,7 @@ class SciGraphService {
 
   getPartitionedNeighbors(id) {
     var that = this;
+      /* eslint no-trailing-spaces: 0 */
 
     var result = new Promise(
       function(resolve, reject) {
@@ -70,8 +71,6 @@ class SciGraphService {
                      partition.push(JSON.parse('{"name":"' + targetObject + '"}'));
                   }
                 }
-
-                  console.log(partitionMap);
                 resolve(partitionMap);
               },
               function (z2) {

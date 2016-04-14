@@ -19,8 +19,7 @@ export default class LandingController {
       var root;
       var currentNode;
 
-
-      $timeout(function(){
+      $timeout(function() {
          that.title += 'x';
       }, 5000);
 
@@ -59,11 +58,10 @@ export default class LandingController {
           });
       }
 
-      this.scigraph.getPartitionedNeighbors('DOID:863').then(
+      this.scigraph.getPartitionedNeighbors('MESH:C566327').then(
           function (neighbors) {
               that.$rootScope.$apply(function() {
                   that.neighbors = neighbors;
-                //  console.log(neighbors);
                   initialize();
               });
           },
@@ -73,11 +71,11 @@ export default class LandingController {
 
 
 
-      function initialize(){
+      function initialize() {
           root = that.neighbors;
           root.x0 = height / 2;
           root.y0 = 0;
-          root.name = "DOID:863";
+          root.name = "OMIM:101200";
 
           //Let it know it has children
           root._children = root.subClassOf;
@@ -86,7 +84,7 @@ export default class LandingController {
           d3.select(self.frameElement).style("height", "800px");
       }
 
-      function sciCall(sciRoot){
+      function sciCall(sciRoot) {
           var safeName = sciRoot.name;
           that.scigraph.getPartitionedNeighbors(sciRoot.name).then(
               function (neighbors) {
@@ -244,16 +242,23 @@ export default class LandingController {
           }
       }
 
-      function moveOn(d){
+      function moveOn(d) {
 
+          var axisData = [];
+
+          console.log("test");
           for (var key in d) {
+              console.log("test");
               if (d.hasOwnProperty(key)) {
-                currentNode[key] = d[key];
+                  currentNode[key] = d[key];
+                  if(d[key] === Array){
+                     axisData.push({"name:": d[key], "parent": d.name, "_children": "d._children", "nodeType": 2});
+                  }
               }
           }
 
           //Get list of d attributes, for now 3 presets, will be fixed by next push
-          var axisData = [{"name": "subClassOf", "parent": d.name, "_children": d._children, "nodeType": 2}, {"name": "~isDefinedBy", "parent": d.name, "_children": d._children, "nodeType": 3}, {"name": "~subClassOf", "parent": d.name, "_children": d._children, "nodeType": 4}];
+         // var axisData = [{"name": "subClassOf", "parent": d.name, "_children": d._children, "nodeType": 2}, {"name": "~isDefinedBy", "parent": d.name, "_children": d._children, "nodeType": 3}, {"name": "~subClassOf", "parent": d.name, "_children": d._children, "nodeType": 4}];
 
           //d._children = axisData;
           d.children = axisData;
